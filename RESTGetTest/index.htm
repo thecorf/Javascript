@@ -17,36 +17,44 @@
 </head>
 
 <body>
-    <h1>MostWanted, Vue3 + REST</h1>
+    <h1>Most Wanted, Vue3 + REST</h1>
 
     <div id="app">
 
         <div v-if="error" style="color: red">{{error}}</div>
 
         <div class="card" v-if="posts.items.length > 0">
-            <div class="card-header">
-                 
-            </div>
             <div class="card-body">
                 <div v-for="post in posts.items" :key="post.id">
-                    {{ post.title }}<br>
+                    {{ post.title }}
                     <div v-html="post.details"></div>
                     <img
                         v-if="post.images && post.images[0] && post.images[0].thumb"
                         v-bind:src="post.images[0].thumb"
                         v-bind:alt="post.title"
                     >
-                    <br>
                 </div>
             </div>
         </div>
-        <!--table v-if="posts.length" class="table table-striped">
-            <tr v-for="post in posts">
-                <td>{{post.userId}}</td>
-                <td>{{post.title}}</td>
-            </tr>
-        </table-->
         <div v-else style="font-style: italic;">No such posts</div>
+
+        <!-- Add pagination controls -->
+        <div v-if="posts.items && posts.items.length > 0" class="mt-3">
+            <button @click="prevPage" :disabled="currentPage <= 1" class="btn btn-secondary">Previous</button>
+            <span class="mx-2">Page {{ currentPage }}</span>
+            <button @click="nextPage" :disabled="currentPage >= Math.ceil(posts.total / 20)" class="btn btn-secondary">Next</button>
+            
+            <!-- Jump to page input -->
+            <input 
+                v-model.number="jumpToPageNumber" 
+                type="number" 
+                min="1" 
+                placeholder="Jump to page"
+                class="form-control"
+                style="width: 150px; display: inline-block; margin-left: 10px;"
+            >
+            <button @click="jumpToPage" class="btn btn-primary" style="margin-left: 5px;">Go</button>
+        </div>
     </div>
 
     <script src="index.js"></script>
